@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TestApp.Models.FinancialItem>
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-4">
+            <h2 class="text-primary">Financial Items</h2>
+        </div>
+        <div class="col-8 text-right">
+            <form asp-action="SeedData" method="post" style="display: inline-block;">
+                <button type="submit" class="btn btn-warning">Seed Financial items</button>
+            </form>
+            <a asp-controller="FinancialItem" asp-action="Create" class="btn btn-primary ml-4">Create new Financial item</a>
+        </div>
+    </div>
+    <br />
+</div>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Partner
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th class="text-right">
+                    <form asp-action="DeleteAll" method="post">
+                        <div id="confirmDeleteSpan" style="display:none">
+                            <span class="text-center">Are you sure you want to delete this item?</span><br />
+                            <div class="w-100 btn-group" role="group">
+                                <button type="submit" class="btn btn-danger mx-1 w-50">Yes</button>
+                                <a asp-action="Index" class="btn btn-success mx-1 w-50" onclick="confirmDelete(false)">No</a>
+                            </div>
+                        </div>
+                        <span id="deleteSpan">
+                            <a href="#" class="btn btn-danger mx-1" onclick="confirmDelete(true)">Delete All</a>
+                        </span>
+                    </form>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td width="25%">@item.Partner.Name</td>
+                    <td width="25%">@item.Date</td>
+                    <td width="25%">@item.Amount.ToString("0.00")</td>
+                    <td width="25%">
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-controller="FinancialItem" asp-action="Update" asp-route-Id="@item.Id" class="btn btn-primary mx-1">Edit</a>
+                            <a asp-controller="FinancialItem" asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger mx-1">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="m-3 border border-info">
+        <p class="m-3">There are no Finacial items in the database.</p>
+    </div>
+
+}
